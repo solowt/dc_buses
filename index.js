@@ -5,6 +5,8 @@ var app = express();
 
 app.set('port', (process.env.PORT || 3000));
 app.use(express.static(__dirname + '/public'));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
+
 
 // array to hold all buses, will be updated in a loop eventually
 var allBuses = [];
