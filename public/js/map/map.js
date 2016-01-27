@@ -4,5 +4,6 @@
   angular
   .module("map", [
     "ngResource"
-  ])
+    // "$http"
+  ]);
 })();

@@ -1,6 +1,6 @@
 (function(){
   angular
-  .module("dcBus")
+  .module("map")
   .controller("MapController", [
     "$stateParams",
     "$state",
@@ -10,10 +10,18 @@
   ]);
 
   function MapFunction($stateParams, $state, $scope, $interval){
-    console.log("asasa");
+    var self = this;
     this.getBuses = function() {
 
     }
-
+    var map;
+    this.initMap = function() {
+      console.log('asas')
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(40.0000, -98.0000),
+        zoom: 8
+      });
+    }
+    this.initMap();
   }
 })();
