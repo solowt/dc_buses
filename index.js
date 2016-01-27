@@ -3,20 +3,36 @@ var cors = require("cors");
 var functions = require("./functions/functionlib.js")
 var app = express();
 
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
+
 app.set('port', (process.env.PORT || 3000));
 app.use(express.static(__dirname + '/public'));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
-
-// array to hold all buses, will be updated in a loop eventually
 var allBuses = [];
 
-app.get('/', function(req, res){
+var busLoop = function(){
   functions.getAllBuses().then(function(data){
-    res.json(data);
+    allBuses = data;
+    console.log("Got bus data.");
+    io.emit("busUpdate", allBuses);
+    setTimeout(busLoop, 10000);
+  });
+}
+// busLoop();
+
+
+io.on('connection', function(socket){
+  socket.on('giveBuses', function(){
+    io.emit("busUpdate", allBuses);
   })
+})
+
+app.get('/buses', function(req, res){
+  res.json(allBuses);
 });
 
-app.listen(app.get('port'), function(){
+server.listen(app.get('port'), function(){
   console.log("App listening on port", app.get('port'));
 });

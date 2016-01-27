@@ -5,23 +5,43 @@
     "$stateParams",
     "$state",
     "$scope",
-    "$interval",
+    "mySocket",
     MapFunction
   ]);
 
-  function MapFunction($stateParams, $state, $scope, $interval){
+  function MapFunction($stateParams, $state, $scope, mySocket){
     var self = this;
-    this.getBuses = function() {
+    mySocket.emit("giveBuses");
+    this.buses = [];
 
+    $scope.$on('socket:busUpdate', function (ev, data) {
+      console.log("Got new Buses data");
+      self.buses = data;
+      self.drawBuses();
+    });
+
+    // draw this and we're basically done!
+    this.drawBuses = function() {
+      setMapOnAll(null); // remove current markers from map
+      for (var i=0; i<self.buses.length; i++){
+        var loc = new google.maps.LatLng(38.9047, -77.0164); //change this
+        var marker = new google.maps.Marker({
+          position: loc,
+          animation: google.maps.Animation.BOUNCE,
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        });
+      }
     }
     var map;
     this.initMap = function() {
-      console.log('asas')
       map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(40.0000, -98.0000),
-        zoom: 8
+        center: new google.maps.LatLng(38.9047, -77.0164),
+        zoom: 13
       });
     }
     this.initMap();
+    this.drawBuses();
+    console.log(map);
   }
 })();

@@ -1,5 +1,6 @@
 #map {
   height: 100%;
+  border: 4px solid grey;
 }
 .col-md-7 {
   height: 700px;
