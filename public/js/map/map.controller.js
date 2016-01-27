@@ -90,7 +90,7 @@
         })(marker, i, contentString));
       }
       self.setBuses(self.map);
-      console.log(self.buses.length);
+      // console.log(self.buses.length);
       self.information = self.getInfomation();
     }
 
@@ -102,6 +102,11 @@
         map: self.map,
         icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
       });
+      var userWindow = new google.maps.InfoWindow();
+      google.maps.event.addListener(user, 'click', function(){
+        userWindow.setContent("<h3>You are here</h3>");
+        userWindow.open(self.map, user);
+      })
     }
 
     this.initMap = function() {
