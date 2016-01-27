@@ -4,6 +4,7 @@
   angular
   .module("map", [
     "ngResource",
+    "geolocation",
     "btford.socket-io"
   ])
   .factory('mySocket', function(socketFactory){

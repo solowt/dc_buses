@@ -20,7 +20,7 @@ var busLoop = function(){
     setTimeout(busLoop, 10000);
   });
 }
-// busLoop();
+busLoop();
 
 
 io.on('connection', function(socket){

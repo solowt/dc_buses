@@ -33,7 +33,7 @@
     <script src="js/map/map.js"></script>
     <script src="js/map/map.controller.js"></script>
 </head>
-<body ng-controller="MapController">
+<body ng-controller="MapController as MapModel">
 <div class="container">
     <div class="header">
         <h3 class="text-muted">Bus Tracker</h3>
@@ -53,7 +53,8 @@
                 </div>
                 <!-- Panel Body -->
                 <div class="panel-body">
-
+                    <p>Total Number of Buses: {{MapModel.information.numBuses}}</p>
+                    <p>User Location: {{MapModel.userLoc.lat}}, {{MapModel.userLoc.long}}</p>
                 </div>
             </div>
         </div>
