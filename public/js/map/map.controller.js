@@ -11,6 +11,7 @@
   ]);
 
   function MapFunction($stateParams, $state, $scope, mySocket, geolocation){
+    console.log("In controller");
     var self = this;
     // ask the back end for an update
     mySocket.emit("giveBuses");
@@ -35,6 +36,25 @@
       self.buses = data.BusPositions;
       self.drawBuses();
     });
+
+    // use google direction service to draw bus route on map
+    // trigger on click
+    this.getShowRoute = function (index) {
+      console.log(new google.maps.LatLng(self.buses[index].Lat, self.buses[index].Lon));
+      console.log(self.buses[index].TripHeadsign);
+      self.directionsService.route({
+        origin: new google.maps.LatLng(self.buses[index].Lat, self.buses[index].Lon),
+        destination: self.buses[index].TripHeadsign+" Washington, DC",
+        travelMode: google.maps.TravelMode.TRANSIT
+      }, function (res, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+          console.log(res);
+          self.directionsDisplay.setDirections(res);
+        } else {
+          console.log("Directions failed: "+status)
+        }
+      });
+    }
 
     // set all buses on the map
     this.setBuses = function (map) {
@@ -86,6 +106,7 @@
           return function() {
             infoWindow.setContent(contentString);
             infoWindow.open(self.map, marker)
+            self.getShowRoute(i);
           }
         })(marker, i, contentString));
       }
@@ -102,6 +123,7 @@
         map: self.map,
         icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
       });
+      // add route function here
       var userWindow = new google.maps.InfoWindow();
       google.maps.event.addListener(user, 'click', function(){
         userWindow.setContent("<h3>You are here</h3>");
@@ -115,6 +137,10 @@
         zoom: 17,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
+      self.directionsService = new google.maps.DirectionsService;
+      self.directionsDisplay = new google.maps.DirectionsRenderer;
+      self.directionsDisplay.setMap(self.map);
+      google.maps.TransitOptions = {modes: ["bus"]};
     }
   }
 })();

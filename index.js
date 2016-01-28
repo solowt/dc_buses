@@ -17,7 +17,7 @@ var busLoop = function(){
     allBuses = data;
     console.log("Got bus data.");
     io.emit("busUpdate", allBuses);
-    setTimeout(busLoop, 10000);
+    setTimeout(busLoop, 20000);
   });
 }
 busLoop();
