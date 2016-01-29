@@ -20,10 +20,10 @@ var busLoop = function(){
     setTimeout(busLoop, 20000);
   });
 }
-busLoop();
 
 
 io.on('connection', function(socket){
+  busLoop();
   socket.on('giveBuses', function(){
     io.emit("busUpdate", allBuses);
   })

@@ -7,10 +7,11 @@
     "$scope",
     "mySocket",
     "geolocation",
+    "$compile",
     MapFunction
   ]);
 
-  function MapFunction($stateParams, $state, $scope, mySocket, geolocation){
+  function MapFunction($stateParams, $state, $scope, mySocket, geolocation, $compile){
     console.log("In controller");
     var self = this;
     // ask the back end for an update
@@ -28,27 +29,26 @@
       self.drawUser();
     });
 
-    // add poly around entire bus system.  make it a square?
-
     // listen for socket messages
     $scope.$on('socket:busUpdate', function (ev, data) {
       console.log("Got new Buses data");
       self.buses = data.BusPositions;
-      self.drawBuses();
+      if (self.buses){
+        self.drawBuses();
+      }
     });
 
     // use google direction service to draw bus route on map
     // trigger on click
     this.getShowRoute = function (index) {
-      console.log(new google.maps.LatLng(self.buses[index].Lat, self.buses[index].Lon));
-      console.log(self.buses[index].TripHeadsign);
       self.directionsService.route({
         origin: new google.maps.LatLng(self.buses[index].Lat, self.buses[index].Lon),
-        destination: self.buses[index].TripHeadsign+" Washington, DC",
-        travelMode: google.maps.TravelMode.TRANSIT
+        destination: self.buses[index].TripHeadsign+", Washington, DC",
+        travelMode: google.maps.TravelMode.TRANSIT,
+        transitOptions: {modes:[google.maps.TransitMode.BUS]}
       }, function (res, status) {
         if (status === google.maps.DirectionsStatus.OK) {
-          console.log(res);
+          // console.log(res);
           self.directionsDisplay.setDirections(res);
         } else {
           console.log("Directions failed: "+status)
@@ -78,8 +78,8 @@
       }
     }
 
-    // draw this and we're basically done!
     this.drawBuses = function() {
+      console.log("drawing buses")
       self.removeBuses();
       // console.log(self.markers.length);
       for (var i=0; i<self.buses.length; i++){
@@ -99,6 +99,7 @@
         "<p>Direction: "+self.buses[i].DirectionText+"</p>"+
         "<p>Destination: "+self.buses[i].TripHeadsign+"</p>"+
         "</div>";
+        // var compiled = $compile(contentString)($scope)
 
 
         var infoWindow = new google.maps.InfoWindow();
@@ -114,7 +115,6 @@
       // console.log(self.buses.length);
       self.information = self.getInfomation();
     }
-
     // function to place the user on the map
     this.drawUser = function() {
       var pos = new google.maps.LatLng(self.userLoc.lat, self.userLoc.long);
@@ -138,9 +138,8 @@
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
       self.directionsService = new google.maps.DirectionsService;
-      self.directionsDisplay = new google.maps.DirectionsRenderer;
+      self.directionsDisplay = new google.maps.DirectionsRenderer({preserveViewport: true});
       self.directionsDisplay.setMap(self.map);
-      google.maps.TransitOptions = {modes: ["bus"]};
     }
   }
 })();
