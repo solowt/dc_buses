@@ -58,7 +58,8 @@
 
     // set all buses on the map
     this.setBuses = function (map) {
-      for (var i = 0; i < self.markers.length; i++) {
+      var length = self.markers.length;
+      for (var i = 0; i<length; i++) {
         self.markers[i].setMap(map);
       }
     }
@@ -79,11 +80,15 @@
     }
 
     this.drawBuses = function() {
+      var delayCounter = 0;
       console.log("drawing buses")
       self.removeBuses();
       // console.log(self.markers.length);
-      for (var i=0; i<self.buses.length; i++){
-        var loc = new google.maps.LatLng(self.buses[i].Lat, self.buses[i].Lon); //change this
+      for (var i = 0; i<self.buses.length; i++){
+        var loc = new google.maps.LatLng(self.buses[i].Lat, self.buses[i].Lon);
+
+        delayCounter+=self.buses[i].Deviation;
+
         var marker = new google.maps.Marker({
           position: loc,
           // animation: google.maps.Animation.BOUNCE,
@@ -100,7 +105,7 @@
         "<p>Destination: "+self.buses[i].TripHeadsign+"</p>"+
         "</div>";
         // var compiled = $compile(contentString)($scope)
-
+        //not used but interesting
 
         var infoWindow = new google.maps.InfoWindow();
         google.maps.event.addListener(marker, 'click', (function(marker, i, contentString){
@@ -111,9 +116,10 @@
           }
         })(marker, i, contentString));
       }
+      self.information = self.getInfomation();
+      self.information.delay = delayCounter/self.buses.length;
       self.setBuses(self.map);
       // console.log(self.buses.length);
-      self.information = self.getInfomation();
     }
     // function to place the user on the map
     this.drawUser = function() {
