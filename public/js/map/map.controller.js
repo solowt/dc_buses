@@ -24,7 +24,7 @@
 
     geolocation.getLocation().then(function(data){
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
-      self.map.center = new google.maps.LatLng(self.userLoc.lat, self.userLoc.long);
+      self.map.setCenter(new google.maps.LatLng(self.userLoc.lat, self.userLoc.long));
       self.drawUser();
       mySocket.emit("giveBuses");
     });
