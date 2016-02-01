@@ -1,4 +1,3 @@
-var env = require("../env.js");
 var request = require("request");
 var fs = require("fs");
 var env = fs.existsSync("./env.js") ? require("../env") : process.env;
