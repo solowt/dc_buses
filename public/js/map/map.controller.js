@@ -21,10 +21,10 @@
     this.map;
     this.information = {};
     this.userLoc = {};
+    this.initMap();
 
     geolocation.getLocation().then(function(data){
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
-      self.initMap();
       self.drawUser();
       mySocket.emit("giveBuses");
     });
