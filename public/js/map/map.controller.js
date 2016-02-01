@@ -103,6 +103,7 @@
         "<p>Route ID: "+self.buses[i].RouteID+"</p>"+
         "<p>Direction: "+self.buses[i].DirectionText+"</p>"+
         "<p>Destination: "+self.buses[i].TripHeadsign+"</p>"+
+        "<p>Deviation from schedule: "+self.buses[i].Deviation+"</p>"
         "</div>";
         // var compiled = $compile(contentString)($scope)
         //not used but interesting
