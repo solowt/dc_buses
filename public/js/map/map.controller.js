@@ -14,8 +14,7 @@
   function MapFunction($stateParams, $state, $scope, mySocket, geolocation, $compile){
     console.log("In controller");
     var self = this;
-    // ask the back end for an update
-    // declare vars
+    // declar vars
     this.buses = [];
     this.markers = [];
     this.map;
@@ -138,6 +137,7 @@
       })
     }
 
+    // call this right away
     this.initMap = (function() {
       self.map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(38.9047, -77.0164),
@@ -149,6 +149,5 @@
       self.directionsDisplay.setMap(self.map);
       console.log(self.map);
     })()
-    // this.initMap();
   }
 })();
