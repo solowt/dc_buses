@@ -137,7 +137,7 @@
       })
     }
 
-    this.initMap = function() {
+    this.initMap = (function() {
       self.map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(self.userLoc.lat, self.userLoc.long),
         zoom: 17,
@@ -146,7 +146,7 @@
       self.directionsService = new google.maps.DirectionsService;
       self.directionsDisplay = new google.maps.DirectionsRenderer({preserveViewport: true});
       self.directionsDisplay.setMap(self.map);
-    }
+    })()
+    // this.initMap();
   }
-  this.initMap();
 })();
