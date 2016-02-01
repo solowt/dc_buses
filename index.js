@@ -11,8 +11,9 @@ app.use(express.static(__dirname + '/public'));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 var allBuses = [];
-
+var loopCounter = 0;
 var busLoop = function(){
+  loopCounter++;
   functions.getAllBuses().then(function(data){
     allBuses = data;
     console.log("Got bus data.");
@@ -23,7 +24,9 @@ var busLoop = function(){
 
 
 io.on('connection', function(socket){
-  busLoop();
+  if (loopCounter==0){
+    busLoop();
+  }
   socket.on('giveBuses', function(){
     io.emit("busUpdate", allBuses);
   })
