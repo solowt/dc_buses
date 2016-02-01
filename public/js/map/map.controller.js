@@ -24,6 +24,7 @@
 
     geolocation.getLocation().then(function(data){
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
+      self.map.center = new google.maps.LatLng(self.userLoc.lat, self.userLoc.long);
       self.drawUser();
       mySocket.emit("giveBuses");
     });
@@ -139,7 +140,7 @@
 
     this.initMap = (function() {
       self.map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(self.userLoc.lat, self.userLoc.long),
+        center: new google.maps.LatLng(38.9047, -77.0164),
         zoom: 17,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
