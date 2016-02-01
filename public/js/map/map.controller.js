@@ -15,7 +15,6 @@
     console.log("In controller");
     var self = this;
     // ask the back end for an update
-    mySocket.emit("giveBuses");
     // declare vars
     this.buses = [];
     this.markers = [];
@@ -27,6 +26,7 @@
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
       self.initMap();
       self.drawUser();
+      mySocket.emit("giveBuses");
     });
 
     // listen for socket messages
