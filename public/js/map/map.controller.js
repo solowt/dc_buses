@@ -128,7 +128,7 @@
       var user = new google.maps.Marker({
         position: pos,
         map: self.map,
-        icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+        icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
       });
       // add route function here
       var userWindow = new google.maps.InfoWindow();
