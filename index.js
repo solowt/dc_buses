@@ -13,6 +13,7 @@ app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 var allBuses = [];
 
 var busLoop = function(){
+  console.log("asasasas")
   functions.getAllBuses().then(function(data){
     allBuses = data;
     console.log("Got bus data.");
