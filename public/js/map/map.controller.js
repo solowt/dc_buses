@@ -23,7 +23,6 @@
     this.userLoc = {};
 
     geolocation.getLocation().then(function(data){
-      console.log(data);
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
       self.drawUser();
       mySocket.emit("giveBuses");
@@ -147,6 +146,7 @@
       self.directionsService = new google.maps.DirectionsService;
       self.directionsDisplay = new google.maps.DirectionsRenderer({preserveViewport: true});
       self.directionsDisplay.setMap(self.map);
+      console.log(self.map);
     })()
     // this.initMap();
   }
