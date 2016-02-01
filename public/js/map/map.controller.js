@@ -23,6 +23,7 @@
     this.userLoc = {};
 
     geolocation.getLocation().then(function(data){
+      console.log(data);
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
       self.drawUser();
       mySocket.emit("giveBuses");
