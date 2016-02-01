@@ -33,7 +33,7 @@
     $scope.$on('socket:busUpdate', function (ev, data) {
       console.log("Got new Buses data");
       self.buses = data.BusPositions;
-      if (self.buses){
+      if (self.buses && self.map){
         self.drawBuses();
       }
     });
