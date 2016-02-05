@@ -1,4 +1,4 @@
-#[DC Buses](https://dc-bus.herokuapp.com/) 
+#[DC Buses](https://dc-bus.herokuapp.com/)
 This app uses wmata's bus prediction api to draw each wmata bus on a map.  I used google maps for the mapping aspect, Angular for the front-end, and Node/Express for the back-end.
 
 Data updates every 20 seconds at which point bus markers will be removed and re-drawn without a page refresh.
@@ -17,6 +17,7 @@ Web sockets (socket.io) make up the connection between the front-end and the bac
 *  The user is represented in the middle of the initial map, buses are represented by black bus icons.
 *  There is some data to the right regarding the total number of buses and the user's location.
 *  Clicking on a bus will populate some information about that bus and estimate that bus's present route on the map.
+*  You can use the dropdown menu to filter a specific route.  Selecting "Show All" will revert to showing every bus. 
 *  Routing is an estimate only, based on the bus's current location and its destination.
 
 ##Challenges
