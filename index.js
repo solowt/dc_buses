@@ -1,6 +1,6 @@
 var express = require("express");
 var cors = require("cors");
-var functions = require("./functions/functionlib.js")
+var functions = require("./functions/functionlib.js");
 var app = express();
 
 var server = require("http").Server(app);
@@ -20,17 +20,17 @@ var busLoop = function(){
     io.emit("busUpdate", allBuses);
     setTimeout(busLoop, 20000);
   });
-}
+};
 
 
 io.on('connection', function(socket){
   if (loopCounter==0){
     busLoop();
-  }
+  };
   socket.on('giveBuses', function(){
     io.emit("busUpdate", allBuses);
-  })
-})
+  });
+});
 
 app.get('/buses', function(req, res){
   res.json(allBuses);

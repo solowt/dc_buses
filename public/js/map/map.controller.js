@@ -20,6 +20,8 @@
     this.map;
     this.information = {};
     this.userLoc = {};
+    this.selectedRoute = "";
+    this.selectedBuses = [];
 
     geolocation.getLocation().then(function(data){
       self.userLoc = {lat:data.coords.latitude, long:data.coords.longitude};
@@ -32,11 +34,37 @@
     $scope.$on('socket:busUpdate', function (ev, data) {
       console.log("Got new Buses data");
       self.buses = data.BusPositions;
-      if (self.buses && self.map){
-        self.drawBuses();
+      if (self.selectedRoute && self.selectedRoute != "Show All"){
+        self.selectedBuses = self.testArray();
+      }
+      if (self.buses && self.map && self.selectedRoute && self.selectedRoute != "Show All" ) {
+        self.drawBuses(self.selectedBuses);
+      }else if (self.buses && self.map){
+        self.drawBuses(self.buses);
       }
     });
 
+    this.setFilter = function(selected){
+      self.selectedRoute = selected;
+      if (selected != "Show All"){
+        self.selectedBuses = self.testArray();
+      }
+      if (self.buses && self.map && self.selectedRoute && self.selectedRoute != "Show All" ) {
+        self.drawBuses(self.selectedBuses);
+      }else if (self.buses && self.map){
+        self.drawBuses(self.buses);
+      }
+    }
+    this.testArray = function(){
+      return self.buses.filter(self.trainTest);
+    }
+    this.trainTest = function(element){
+      if (self.selectedRoute===element.RouteID){
+        return true;
+      } else {
+        return false;
+      }
+    }
     // use google direction service to draw bus route on map
     // trigger on click
     this.getShowRoute = function (index) {
@@ -78,15 +106,15 @@
       }
     }
 
-    this.drawBuses = function() {
+    this.drawBuses = function(busArray) {
       var delayCounter = 0;
-      console.log("drawing buses")
+      console.log("drawing buses");
       self.removeBuses();
       // console.log(self.markers.length);
-      for (var i = 0; i<self.buses.length; i++){
-        var loc = new google.maps.LatLng(self.buses[i].Lat, self.buses[i].Lon);
+      for (var i = 0; i<busArray.length; i++){
+        var loc = new google.maps.LatLng(busArray[i].Lat, busArray[i].Lon);
 
-        delayCounter+=self.buses[i].Deviation;
+        delayCounter+=busArray[i].Deviation;
 
         var marker = new google.maps.Marker({
           position: loc,
@@ -99,10 +127,10 @@
         // this is the info window for the current marker
         var contentString = "<div>"+
         "<h4>Bus Information</h4>"+
-        "<p>Route ID: "+self.buses[i].RouteID+"</p>"+
-        "<p>Direction: "+self.buses[i].DirectionText+"</p>"+
-        "<p>Destination: "+self.buses[i].TripHeadsign+"</p>"+
-        "<p>Deviation from schedule: "+self.buses[i].Deviation+"</p>"
+        "<p>Route ID: "+busArray[i].RouteID+"</p>"+
+        "<p>Direction: "+busArray[i].DirectionText+"</p>"+
+        "<p>Destination: "+busArray[i].TripHeadsign+"</p>"+
+        "<p>Deviation from schedule: "+busArray[i].Deviation+"</p>"
         "</div>";
         // var compiled = $compile(contentString)($scope)
         //not used but interesting
@@ -117,7 +145,7 @@
         })(marker, i, contentString));
       }
       self.information = self.getInfomation();
-      self.information.delay = delayCounter/self.buses.length;
+      self.information.delay = delayCounter/busArray.length;
       self.setBuses(self.map);
       // console.log(self.buses.length);
     }
@@ -147,7 +175,7 @@
       self.directionsService = new google.maps.DirectionsService;
       self.directionsDisplay = new google.maps.DirectionsRenderer({preserveViewport: true});
       self.directionsDisplay.setMap(self.map);
-      console.log(self.map);
+      // console.log(self.map);
     })()
   }
 })();
